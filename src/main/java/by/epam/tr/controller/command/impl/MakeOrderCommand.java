@@ -17,6 +17,11 @@ import by.epam.tr.service.OrderService;
 import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 
+/**
+ * 
+ * Class - command to place an order
+ *
+ */
 public class MakeOrderCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(MakeOrderCommand.class);
 
@@ -26,17 +31,28 @@ public class MakeOrderCommand implements Command {
     HttpSession session = request.getSession(true);
     User user = (User) session.getAttribute("user");
     List<Item> cart = (List<Item>) session.getAttribute("cart");
-    System.out.println("rootlist");
     int userId = user.getUserId();
+    boolean isOrdered;
     OrderService orderService = ServiceProvider.getServiceprovider().getOrderService();
 
     try {
+      if (cart.size() > 0) {
+        isOrdered = orderService.makeOrder(userId, cart);
 
-      orderService.makeOrder(userId, cart);
-
-      RequestDispatcher dispatcher =
+        if (isOrdered) {
+          RequestDispatcher dispatcher =
           request.getRequestDispatcher(JSPPageName.MAKE_ORDER_SUCCESS_PAGE);
-      dispatcher.forward(request, response);
+          dispatcher.forward(request, response);
+        } else {
+          RequestDispatcher dispatcher =
+              request.getRequestDispatcher(JSPPageName.WRONG_ORDER_PAGE);
+          dispatcher.forward(request, response);
+        }
+      } else {
+        RequestDispatcher dispatcher =
+            request.getRequestDispatcher(JSPPageName.WRONG_ORDER_PAGE);
+        dispatcher.forward(request, response);
+      }
     } catch (ServiceException e) {
       LOGGER.error(e.getMessage());
     }

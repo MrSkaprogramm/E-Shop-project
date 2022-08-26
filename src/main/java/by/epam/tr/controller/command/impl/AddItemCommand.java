@@ -14,12 +14,18 @@ import by.epam.tr.service.ItemService;
 import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 
+/**
+ * 
+ * Class - the command to add a product to the catalog
+ *
+ */
 public class AddItemCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(AddItemCommand.class);
 
   @Override
   public void execute(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    RequestDispatcher dispatcher;
     String name;
     String itemInfo;
     int price;
@@ -34,10 +40,14 @@ public class AddItemCommand implements Command {
 
       itemService.addItem(name, itemInfo, price);
 
-      RequestDispatcher dispatcher =
+      dispatcher =
           request.getRequestDispatcher(JSPPageName.ADD_ITEM_SUCCESS_PAGE);
       dispatcher.forward(request, response);
     } catch (ServiceException e) {
+      if (e.getMessage().equals("Wrong item data")) {
+        dispatcher = request.getRequestDispatcher(JSPPageName.WRONG_DATA_PAGE);
+        dispatcher.forward(request, response);
+      }
       LOGGER.error("paymentEvaders", e);
     }
   }

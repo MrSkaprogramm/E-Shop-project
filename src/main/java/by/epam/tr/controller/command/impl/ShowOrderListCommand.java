@@ -17,6 +17,11 @@ import by.epam.tr.service.OrderService;
 import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 
+/**
+ * 
+ * Class - the command to display all user orders
+ *
+ */
 public class ShowOrderListCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(ShowOrderListCommand.class);
 

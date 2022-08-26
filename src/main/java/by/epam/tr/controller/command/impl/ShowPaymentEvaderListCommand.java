@@ -16,6 +16,11 @@ import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 import by.epam.tr.service.UserService;
 
+/**
+ * 
+ * Class - the command to show the list of defaulters
+ *
+ */
 public class ShowPaymentEvaderListCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(ShowPaymentEvaderListCommand.class);
 

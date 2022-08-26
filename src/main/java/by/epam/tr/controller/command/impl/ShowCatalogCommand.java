@@ -18,6 +18,11 @@ import by.epam.tr.service.ItemService;
 import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 
+/**
+ * 
+ * Class - the command to display all products in the catalog
+ *
+ */
 public class ShowCatalogCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(ShowCatalogCommand.class);
 

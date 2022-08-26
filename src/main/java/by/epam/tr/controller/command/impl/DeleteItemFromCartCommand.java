@@ -16,6 +16,11 @@ import by.epam.tr.controller.command.Command;
 import by.epam.tr.service.OrderService;
 import by.epam.tr.service.ServiceProvider;
 
+/**
+ * 
+ * Class - the command to remove an item from the cart
+ *
+ */
 public class DeleteItemFromCartCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(DeleteItemFromCartCommand.class);
 

@@ -20,21 +20,23 @@ import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 import by.epam.tr.service.UserService;
 
+/**
+ * 
+ * Class - user authorization command in the program
+ *
+ */
 public class AuthorizationCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(AuthorizationCommand.class);
 
   @Override
   public void execute(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    System.out.println("Hello Word");
 
     String login;
     String password;
 
     login = request.getParameter(RequestParamName.REQ_PARAM_LOGIN);
     password = request.getParameter(RequestParamName.REQ_PARAM_PASS);
-    System.out.println(login);
-    System.out.println(password);
 
     UserService userService = ServiceProvider.getServiceprovider().getClientService();
     RequestDispatcher dispatcher;
@@ -45,7 +47,6 @@ public class AuthorizationCommand implements Command {
 
       user = userService.userAuth(login, password);
       List<Item> cart = new ArrayList<Item>();
-      System.out.println(user);
       request.setAttribute("user", user);
 
       if (user != null) {
@@ -54,12 +55,17 @@ public class AuthorizationCommand implements Command {
         session.setAttribute("cart", cart);
       }
       if (user.getRole() == Role.CLIENT) {
+        request.setAttribute("user", user);
         dispatcher = request.getRequestDispatcher(JSPPageName.USER_CLIENT_PROFILE_PAGE);
       } else {
         dispatcher = request.getRequestDispatcher(JSPPageName.USER_ADMIN_PROFILE_PAGE);
       }
       dispatcher.forward(request, response);
     } catch (ServiceException e) {
+      if (e.getMessage().equals("Wrong authorization data")) {
+        dispatcher = request.getRequestDispatcher(JSPPageName.WRONG_DATA_PAGE);
+        dispatcher.forward(request, response);
+      }
       LOGGER.error(e.getMessage());
     }
   }

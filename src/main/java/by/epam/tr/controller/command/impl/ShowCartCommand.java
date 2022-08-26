@@ -13,6 +13,11 @@ import by.epam.tr.bean.Item;
 import by.epam.tr.controller.JSPPageName;
 import by.epam.tr.controller.command.Command;
 
+/**
+ * 
+ * Class - the command to display all products in the basket
+ *
+ */
 public class ShowCartCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(ShowCartCommand.class);
 

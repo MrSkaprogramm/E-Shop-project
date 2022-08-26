@@ -14,6 +14,11 @@ import by.epam.tr.service.ItemService;
 import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.ServiceProvider;
 
+/**
+ * 
+ * Class - the command to delete an item from the catalog
+ *
+ */
 public class DeleteItemCommand implements Command {
   private static final Logger LOGGER = LogManager.getLogger(DeleteItemCommand.class);
 
