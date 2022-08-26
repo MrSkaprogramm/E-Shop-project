@@ -22,10 +22,18 @@ import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import by.epam.tr.dao.DBParameter;
 import by.epam.tr.dao.DBResourceManager;
 
+/**
+ * 
+ * Database Connection Explorer class
+ *
+ */
 public class ConnectionPool {
+  private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
   private static final ConnectionPool connectionPool = new ConnectionPool();
   private BlockingQueue<Connection> connections;
   private String driverName;
@@ -62,10 +70,10 @@ public class ConnectionPool {
       for (int i = 0; i < poolSize; i++) {
         Connection connection = DriverManager.getConnection(url, user, password);
         PooledConnection pooledConnection = new PooledConnection(connection);
-        connections.add(pooledConnection);
+        connections.put(pooledConnection);
       }
-    } catch (ClassNotFoundException | SQLException e) {
-      e.printStackTrace();
+    } catch (ClassNotFoundException | SQLException | InterruptedException e) {
+      LOGGER.error(e.getMessage());
     }
   }
 
@@ -117,7 +125,7 @@ public class ConnectionPool {
     try {
       closeConnectionQueue(connections);
     } catch (SQLException e) {
-      e.printStackTrace();
+      LOGGER.error(e.getMessage());
     }
   }
 
@@ -131,10 +139,10 @@ public class ConnectionPool {
     }
   }
 
-  public void release(Connection con) throws SQLException {
+  public void release(Connection con) throws SQLException, InterruptedException {
     if (con != null) {
       con.setAutoCommit(true);
-      connections.add(con);
+      connections.put(con);
     }
   }
 
@@ -147,7 +155,9 @@ public class ConnectionPool {
     }
 
     public void reallyClose() throws SQLException {
-      connection.close();
+      if (connection != null) {
+        connection.close();
+      }
     }
 
     @Override
@@ -202,12 +212,10 @@ public class ConnectionPool {
 
     @Override
     public void close() throws SQLException {
-      if (connection.isClosed()) {
-        throw new SQLException();
-      }
-
-      if (connection.isReadOnly()) {
-        connection.setReadOnly(false);
+      try {
+        connections.put(this);
+      } catch (InterruptedException e) {
+        LOGGER.error(e.getMessage());
       }
     }
 
