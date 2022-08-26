@@ -1,5 +1,10 @@
 package by.epam.tr.controller;
 
+/**
+ * 
+ * A class containing possible requests from the page in the attribute of the request variable
+ *
+ */
 public final class RequestParamName {
   public static final String REQ_PARAM_COMMAND_NAME = "command";
   public static final String REQ_PARAM_ID = "id";

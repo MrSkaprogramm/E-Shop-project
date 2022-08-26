@@ -1,7 +1,12 @@
 package by.epam.tr.controller;
 
+/**
+ * 
+ * A class containing all available pages in the program
+ *
+ */
 public final class JSPPageName {
-  public static final String USER_AUTH_PAGE = "/WEB-INF/jsp/user-auth.jsp";
+  public static final String USER_AUTH_PAGE = "/user-auth.jsp";
   public static final String ORDERS_LIST_PAGE = "/WEB-INF/jsp/orders-list.jsp";
   public static final String USER_REGISTER_PAGE = "/WEB-INF/jsp/user-register.jsp";
   public static final String CLIENT_CATALOG_PAGE = "/WEB-INF/jsp/client-catalog.jsp";
@@ -29,4 +34,6 @@ public final class JSPPageName {
       "/WEB-INF/jsp/change-item-details-success.jsp";
   public static final String ERROR_PAGE = "/WEB-INF/jsp/error.jsp";
   public static final String MAIN_PAGE = "/index.jsp";
+  public static final String WRONG_DATA_PAGE = "/WEB-INF/jsp/wrong-data.jsp";
+  public static final String WRONG_ORDER_PAGE = "/WEB-INF/jsp/wrong-order.jsp";
 }
