@@ -1,0 +1,13 @@
+by.epam.tr.bean
+by.epam.tr.bean.builder
+by.epam.tr.controller
+by.epam.tr.controller.command
+by.epam.tr.controller.command.impl
+by.epam.tr.controller.command.impl.go
+by.epam.tr.dao
+by.epam.tr.dao.connection
+by.epam.tr.dao.impl
+by.epam.tr.service
+by.epam.tr.service.impl
+by.epam.tr.service.validation
+by.epam.tr.service.validation.impl
