@@ -33,14 +33,9 @@
 </head>
 <body>
 <div id="header">
-Каталог
 </div>
 <div id="success">
-<h2>Вы добавили товар в корзину</h2>
-	<form action="/E-Shop-Sfia/controller" method="post">
-		<input type="hidden" name="command" value="show_catalog"/>
-		<input type="submit" value="Перейти к каталогу товаров"/>
-	</form>
+<h2>Вы не можете оформить заказ</h2>
 </div>
 <div id="footer">Интернет-магазин E-SHOP-SFIA®</div>
 </body>

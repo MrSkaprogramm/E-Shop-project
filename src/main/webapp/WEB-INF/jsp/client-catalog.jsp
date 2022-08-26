@@ -4,45 +4,70 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+   #footer {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #0000FF; /* Цвет фона */
+    color: #FFFFFF; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+   #button {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #0000FF; /* Цвет фона */
+    color: #FFFFFF; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+   #catalog {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #FFFFFF; /* Цвет фона */
+    color: #191970; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+   #header {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #0000cd; /* Цвет фона */
+    color: #FFFFFF; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+  </style>
 </head>
 <body>
-<h2>Каталог</h2>
+<div id="header">
+<h2>E-SHOP-SFIA</h2>
+</div>
+<div id="button">
+Каталог
 	<form action="/E-Shop-Sfia/controller" method="post">
 		<input type="hidden" name="command" value="show_cart"/>
-		<input type="submit" value="Просмотреть корзину"/>
+		<input type="submit" value="Корзина"/>
 	</form>
 	<form action="/E-Shop-Sfia/controller" method="get">
-		<input type="hidden" name="command" value="goClientPage"/>
-		<input type="submit" value="Профиль пользователя"/>
+		<input type="hidden" name="command" value="go_client_profile"/>
+		<input type="submit" value="Профиль"/>
 	</form>
+</div>
+<div id="catalog">
 <c:forEach items="${catalog}" var="item">
 <h3>${item.name}</h3>
-<p>${item.itemInfo}</p>
-<h4>${item.price}</h4>
+<h4>Описание: ${item.itemInfo}</h4>
+<h4>Цена: ${item.price}</h4>
 	<form action="/E-Shop-Sfia/controller" method="post">
 		<input type="hidden" name="command" value="add_to_cart"/>
-		<input type="hidden" name="itemId" value="2"/>
-		<input type="hidden" name="itemName" value="House"/>
-		<input type="hidden" name="itemInfo" value="Good house"/>
-		<input type="hidden" name="itemPrice" value="1000000"/>
+		<input type="hidden" name="itemId" value="${item.itemId}"/>
+		<input type="hidden" name="itemName" value="${item.name}"/>
+		<input type="hidden" name="itemInfo" value="${item.itemInfo}"/>
+		<input type="hidden" name="itemPrice" value="${item.price}"/>
 		<input type="submit" value="Добавить в корзину"/>
 	</form>
 </c:forEach>
-	<form action="/E-Shop-Sfia/controller" method="post">
-		<input type="hidden" name="command" value="add_to_cart"/>
-		<input type="hidden" name="itemId" value="3"/>
-		<input type="hidden" name="itemName" value="Airplane"/>
-		<input type="hidden" name="itemInfo" value="Good airplane"/>
-		<input type="hidden" name="itemPrice" value="100000"/>
-		<input type="submit" value="Добавить в корзину"/>
-	</form>
-	<form action="/E-Shop-Sfia/controller" method="post">
-		<input type="hidden" name="command" value="add_to_cart"/>
-		<input type="hidden" name="itemId" value="4"/>
-		<input type="hidden" name="itemName" value="Car"/>
-		<input type="hidden" name="itemInfo" value="Good car"/>
-		<input type="hidden" name="itemPrice" value="10000"/>
-		<input type="submit" value="Добавить в корзину"/>
-	</form>
+</div>
 </body>
 </html>

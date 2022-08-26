@@ -5,15 +5,53 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+   BODY { 
+   	background: #FFFFFF;
+   	margin-bottom: 50px; 
+   }
+   #footer {
+    position: fixed; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #0000FF; /* Цвет фона */
+    color: #FFFFFF; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+   #admin {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #FFFFFF; /* Цвет фона */
+    color: #191970; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+   #header {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #0000cd; /* Цвет фона */
+    color: #FFFFFF; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+   #welcome-text {
+    position: static; /* Фиксированное положение */
+    left: 0; bottom: 0; /* Левый нижний угол */
+    padding: 10px; /* Поля вокруг текста */
+    background: #0000FF; /* Цвет фона */
+    color: #FFFFFF; /* Цвет текста */
+    width: 100%; /* Ширина слоя */
+   }
+</style>
 </head>
 <body>
-<h2>Добрый день,</h2>
-<%	User user;
-user = (User)request.getAttribute("user");
-out.print(user.getFio());
-%>
+<div id="header">Профиль</div>
+<div id="welcome-text">
+<h2>Добрый день, <c:out value="${user.fio}"/></h2>
+</div>
+<div id="admin">
 	<form action="/E-Shop-Sfia/controller" method="get">
-		<input type="hidden" name="command" value="goAddItem"/>
+		<input type="hidden" name="command" value="go_add_item"/>
 		<input type="submit" value="Добавить товар"/>
 	</form>
 	<form action="/E-Shop-Sfia/controller" method="post">
@@ -28,5 +66,7 @@ out.print(user.getFio());
 		<input type="hidden" name="command" value="exit"/>
 		<input type="submit" value="Выйти"/>
 	</form>
+</div>
+<div id="footer">Интернет-магазин E-SHOP-SFIA®</div>
 </body>
 </html>
