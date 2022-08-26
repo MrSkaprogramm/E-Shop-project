@@ -13,6 +13,11 @@ import by.epam.tr.dao.ItemDao;
 import by.epam.tr.dao.connection.ConnectionPool;
 import by.epam.tr.dao.connection.ConnectionPoolException;
 
+/**
+ * 
+ * A class of the DAO layer containing methods for working with the Item entity
+ *
+ */
 public class SQLItemDao implements ItemDao {
   private static final ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
 
@@ -26,18 +31,20 @@ public class SQLItemDao implements ItemDao {
   private static final String ADD_ITEM_QUERY =
       "iNSERT INTO items (name, item_info, price) VALUES (?, ?, ?);";
   private static final String DELETE_ITEM_QUERY = "DELETE FROM items WHERE id =?";
-  private static final String UPDATE_ITEM_PRICE_QUERY = "UPDATE items SET price=? WHERE id=?;";
-  private static final String UPDATE_ITEM_INFO_QUERY = "UPDATE items SET item_info=? WHERE id=?;";
   private static final String UPDATE_ITEM_PRICE_AND_INFO_QUERY =
       "UPDATE items SET item_info=?, price=? WHERE id=?;";
 
+  /**
+   * 
+   * Method of adding a product to the catalog
+   *
+   */
   @Override
   public void addItem(String name, String itemInfo, int price)
       throws DaoException {
     Connection con = null;
     ResultSet rs = null;
     PreparedStatement preparedStatement = null;
-    // System.out.println("root2");
 
     try {
       con = connectionPool.takeConnection();
@@ -47,7 +54,6 @@ public class SQLItemDao implements ItemDao {
       preparedStatement.setInt(3, price);
       preparedStatement.executeUpdate();
 
-      //System.out.println("root");
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());
     } finally {
@@ -61,13 +67,17 @@ public class SQLItemDao implements ItemDao {
     }
   }
 
+  /**
+   * 
+   * Method of removing an item from the catalog
+   *
+   */
   @Override
   public boolean deleteItem(int itemId) throws DaoException {
     Connection con = null;
     Statement st = null;
     PreparedStatement preparedStatement = null;
     ResultSet rs = null;
-    // System.out.println("root2");
 
     try {
       con = connectionPool.takeConnection();
@@ -81,7 +91,6 @@ public class SQLItemDao implements ItemDao {
       preparedStatement = con.prepareStatement(DELETE_ITEM_QUERY);
       preparedStatement.setInt(1, itemId);
       preparedStatement.executeUpdate();
-      // System.out.println("root");
       st.close();
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());
@@ -97,12 +106,17 @@ public class SQLItemDao implements ItemDao {
     return true;
   }
 
+  /**
+   * 
+   * Method of getting the entire catalog
+   *
+   */
   @Override
   public List<Item> getAllItems() throws DaoException {
     Connection con = null;
     Statement st = null;
     ResultSet rs = null;
-    // System.out.println("root2");
+    System.out.println("root1");
     List<Item> catalog = new ArrayList<Item>();
 
     try {
@@ -117,8 +131,6 @@ public class SQLItemDao implements ItemDao {
         item.setPrice(rs.getInt(ITEM_PRICE_COLUMN_INDEX));
         catalog.add(item);
       }
-      // System.out.println("root");
-      st.close();
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());
     } finally {
@@ -133,35 +145,27 @@ public class SQLItemDao implements ItemDao {
     return catalog;
   }
 
+  /**
+   * 
+   * Method of changing product data
+   *
+   */
   @Override
   public void changeItemsDetails(int itemId, String itemInfo, int price) throws DaoException {
     Connection con = null;
     ResultSet rs = null;
     PreparedStatement preparedStatement = null;
-    // System.out.println("root2");
 
     try {
       con = connectionPool.takeConnection();
-      // System.out.println("rootcon");
-      if (itemInfo.isEmpty()) {
-        preparedStatement = con.prepareStatement(UPDATE_ITEM_PRICE_QUERY);
-        preparedStatement.setInt(1, price);
-        preparedStatement.setInt(2, itemId);
-        preparedStatement.executeUpdate();
-      } else if (price != -1) {
-        preparedStatement = con.prepareStatement(UPDATE_ITEM_INFO_QUERY);
-        preparedStatement.setString(1, itemInfo);
-        preparedStatement.setInt(2, itemId);
-        preparedStatement.executeUpdate();
-      } else {
+      System.out.println(itemId);
+
         preparedStatement = con.prepareStatement(UPDATE_ITEM_PRICE_AND_INFO_QUERY);
         preparedStatement.setString(1, itemInfo);
         preparedStatement.setInt(2, price);
         preparedStatement.setInt(3, itemId);
         preparedStatement.executeUpdate();
-      }
 
-      // System.out.println("root4");
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());
     } finally {

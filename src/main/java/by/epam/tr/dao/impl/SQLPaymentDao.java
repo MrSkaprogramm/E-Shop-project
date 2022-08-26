@@ -9,6 +9,11 @@ import by.epam.tr.dao.PaymentDao;
 import by.epam.tr.dao.connection.ConnectionPool;
 import by.epam.tr.dao.connection.ConnectionPoolException;
 
+/**
+ * 
+ * A class of the DAO layer containing methods for working with the Order and Payment entity
+ *
+ */
 public class SQLPaymentDao implements PaymentDao {
   private static final ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
 
@@ -17,11 +22,14 @@ public class SQLPaymentDao implements PaymentDao {
   private static final String UPDATE_ORDER_STATUS =
       "UPDATE orders SET order_status = true WHERE id=?;";
 
+  /**
+   * 
+   * Order payment method
+   *
+   */
   @Override
   public void makePayment(int orderId, String bankCardNum, String expiringDate)
       throws DaoException {
-    // System.out.println("rootpay int orderId, String bankCardNum, String expiringDate" + orderId
-    // + bankCardNum + expiringDate);
     Connection con = null;
     ResultSet rs = null;
     PreparedStatement preparedStatement = null;
@@ -29,19 +37,16 @@ public class SQLPaymentDao implements PaymentDao {
 
     try {
       con = connectionPool.takeConnection();
-      // System.out.println("rootpay1 " + orderId);
       preparedStatement = con.prepareStatement(UPDATE_ORDER_PAYMENT_INFORMATION);
       preparedStatement.setString(1, bankCardNum);
       preparedStatement.setString(2, expiringDate);
       preparedStatement.setInt(3, orderId);
       preparedStatement.executeUpdate();
-      // System.out.println("rootpay2 " + orderId);
 
       preparedStatement2 = con.prepareStatement(UPDATE_ORDER_STATUS);
       preparedStatement2.setInt(1, orderId);
       preparedStatement2.executeUpdate();
 
-      // System.out.println("root");
       preparedStatement2.close();
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());

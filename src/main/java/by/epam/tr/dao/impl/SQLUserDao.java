@@ -16,6 +16,11 @@ import by.epam.tr.dao.UserDao;
 import by.epam.tr.dao.connection.ConnectionPool;
 import by.epam.tr.dao.connection.ConnectionPoolException;
 
+/**
+ * 
+ * A class of the DAO layer containing methods for working with the User entity
+ *
+ */
 public class SQLUserDao implements UserDao {
   private static final ConnectionPool connectionPool = ConnectionPool.getConnectionPool();
 
@@ -37,9 +42,15 @@ public class SQLUserDao implements UserDao {
       "UPDATE users SET status = false WHERE id =?";
   private static final String USER_REGISTRATION_QUERY =
       "iNSERT INTO users (login, password, users_role, FIO, email, address, status) VALUES (?, ?, ?, ?, ?, ?, true);";
+  private static final String FIND_BY_USER_ID_QUERY = "SELECT * FROM users WHERE id =?";
+  private static final String CHECK_UNIQUENESS_USER_LOGIN_QUERY =
+      "SELECT * FROM users WHERE login =?";
 
-
-
+  /**
+   * 
+   * User authorization method
+   *
+   */
   public User userAuth(String login, String password) throws DaoException {
     Connection con = null;
     PreparedStatement preparedStatement = null;
@@ -97,14 +108,17 @@ public class SQLUserDao implements UserDao {
       return user;
   }
 
+  /**
+   * 
+   * User registration method
+   *
+   */
   @Override
-  public User userRegistration(String login, String password, String fio, String email,
+  public void userRegistration(String login, String password, String fio, String email,
       String phoneNum, String address, int role) throws DaoException {
     Connection con = null;
     ResultSet rs = null;
     PreparedStatement preparedStatement = null;
-    User user = new User();
-    // System.out.println("root2");
 
     try {
       con = connectionPool.takeConnection();
@@ -117,7 +131,6 @@ public class SQLUserDao implements UserDao {
       preparedStatement.setString(6, address);
       preparedStatement.executeUpdate();
 
-      // System.out.println("root");
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());
     } finally {
@@ -129,15 +142,18 @@ public class SQLUserDao implements UserDao {
         }
       }
     }
-    return user;
   }
 
+  /**
+   * 
+   * Method of adding a user to the blacklist
+   *
+   */
   @Override
   public void addtoBlackList(int userId) throws DaoException {
     Connection con = null;
-    ResultSet rs = null;
     PreparedStatement preparedStatement = null;
-    // System.out.println("root2");
+    ResultSet rs = null;
 
     try {
       con = connectionPool.takeConnection();
@@ -157,13 +173,17 @@ public class SQLUserDao implements UserDao {
     }
   }
 
+  /**
+   * 
+   * Method of receiving all defaulters
+   *
+   */
   @Override
   public List<User> getAllPaymentEvaders() throws DaoException {
     Connection con = null;
     Statement st = null;
     ResultSet rs = null;
     UserBuilder buildUser = new UserBuilder();
-    // System.out.println("root2");
     List<User> paymentEvaders = new ArrayList<User>();
 
     try {
@@ -171,6 +191,7 @@ public class SQLUserDao implements UserDao {
       st = con.createStatement();
       rs = st.executeQuery(GET_PAYMENT_EVADERS_QUERY);
       while (rs.next()) {
+        buildUser.setUserId(rs.getInt(USER_ID_COLUMN_INDEX));
         buildUser.setLogin(rs.getString(PAYMENT_EVADERS_LOGIN_COLUMN_INDEX));
         buildUser.setFio(rs.getString(PAYMENT_EVADERS_FIO_COLUMN_INDEX));
         if (rs.getInt(PAYMENT_EVADERS_STATUS_COLUMN_INDEX) == 0) {
@@ -181,7 +202,6 @@ public class SQLUserDao implements UserDao {
         User paymentEvader = buildUser.build();
         paymentEvaders.add(paymentEvader);
       }
-      // System.out.println("root");
     } catch (SQLException | ConnectionPoolException e) {
       throw new DaoException(e.getMessage());
     } finally {
@@ -194,5 +214,80 @@ public class SQLUserDao implements UserDao {
       }
     }
     return paymentEvaders;
+  }
+
+  /**
+   * 
+   * User status verification method
+   *
+   */
+  @Override
+  public boolean checkUserStatus(int userId) throws DaoException {
+    Connection con = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet rs = null;
+
+     try {
+      con = connectionPool.takeConnection();
+      preparedStatement = con.prepareStatement(FIND_BY_USER_ID_QUERY);
+      preparedStatement.setInt(1, userId);
+      rs = preparedStatement.executeQuery();
+      rs.next();
+
+      int status = rs.getInt(8);
+      if (status == 0) {
+        return false;
+      }
+    } catch (ConnectionPoolException | SQLException e) {
+      throw new DaoException(e.getMessage());
+    } finally {
+      if (con != null) {
+        try {
+          connectionPool.closeConnection(con, preparedStatement, rs);
+        } catch (SQLException e) {
+          throw new DaoException("Blacklisted user");
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 
+   * User login verification method
+   *
+   */
+  @Override
+  public boolean checkUserLogin(String login) throws DaoException {
+    Connection con = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet rs = null;
+
+    try {
+      con = connectionPool.takeConnection();
+      preparedStatement = con.prepareStatement(CHECK_UNIQUENESS_USER_LOGIN_QUERY);
+      preparedStatement.setString(1, login);
+      rs = preparedStatement.executeQuery();
+
+      int count = 0;
+      while (rs.next()) {
+        count++;
+      }
+      if (count > 0) {
+        return false;
+      }
+    } catch (ConnectionPoolException | SQLException e) {
+      throw new DaoException(e.getMessage());
+    } finally {
+      if (con != null) {
+        try {
+          connectionPool.closeConnection(con, preparedStatement, rs);
+        } catch (SQLException e) {
+          throw new DaoException(e.getMessage());
+        }
+      }
+    }
+
+    return true;
   }
 }
