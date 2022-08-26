@@ -1,5 +1,10 @@
 package by.epam.tr.dao;
 
+/**
+ * 
+ * A class containing database parameters
+ *
+ */
 public class DBParameter {
   private DBParameter() {}
 

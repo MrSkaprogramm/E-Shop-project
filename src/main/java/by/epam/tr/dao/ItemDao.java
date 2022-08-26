@@ -3,6 +3,11 @@ package by.epam.tr.dao;
 import java.util.List;
 import by.epam.tr.bean.Item;
 
+/**
+ * 
+ * Interface of the DAO layer containing methods that work with the Item entity
+ *
+ */
 public interface ItemDao {
   public void addItem(String name, String itemInfo, int price)
       throws DaoException;

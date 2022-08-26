@@ -5,6 +5,11 @@ import by.epam.tr.dao.impl.SQLOrderDao;
 import by.epam.tr.dao.impl.SQLPaymentDao;
 import by.epam.tr.dao.impl.SQLUserDao;
 
+/**
+ * 
+ * The explorer class redirects to a specific class of the DAO layer
+ *
+ */
 public class DaoProvider {
   private static final DaoProvider daoProvider = new DaoProvider();
 
