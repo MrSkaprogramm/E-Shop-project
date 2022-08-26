@@ -8,18 +8,31 @@ import by.epam.tr.dao.DaoProvider;
 import by.epam.tr.dao.UserDao;
 import by.epam.tr.service.ServiceException;
 import by.epam.tr.service.UserService;
-import by.epam.tr.service.validation.DataValidation;
+import by.epam.tr.service.validation.UserValidator;
+import by.epam.tr.service.validation.ValidatorProvider;
 
+/**
+ * 
+ * A class of the Service layer containing methods for working with the User entity
+ *
+ */
 public class UserServiceImpl implements UserService {
   private static final DaoProvider daoProvider = DaoProvider.getDaoprovider();
   private static final UserDao userDao = daoProvider.getUserDao();
-  DataValidation validation = DataValidation.getValidation();
+  private static final ValidatorProvider validatorProvider =
+      ValidatorProvider.getValidatorprovider();
+  private static final UserValidator userValidator = validatorProvider.getUserValidator();
 
+  /**
+   * 
+   * User authorization method
+   *
+   */
   @Override
   public User userAuth(String login, String password) throws ServiceException {
-    /*
-     * if(!validation.check(login, password)) { throw new ServiceException(); }
-     */
+    if (!userValidator.checkUserAuthInfo(login, password)) {
+      throw new ServiceException("Wrong authorization data");
+    }
 
     UserDao userDao = DaoProvider.getDaoprovider().getUserDao();
     User user;
@@ -31,23 +44,36 @@ public class UserServiceImpl implements UserService {
     return user;
   }
 
+  /**
+   * 
+   * User registration method
+   *
+   */
   @Override
-  public User userRegistration(String login, String password, String fio, String email,
+  public boolean userRegistration(String login, String password, String fio, String email,
       String phoneNum, String address, int role) throws ServiceException {
-    User user;
-    System.out.println("root1");
+    if (!userValidator.checkUserRegisterInfo(login, password, fio, email, address)) {
+      throw new ServiceException("Wrong registration data");
+    }
 
     try {
-      user = userDao.userRegistration(login, password, fio, email, phoneNum, address, role);
+      if (!userDao.checkUserLogin(login)) {
+        return false;
+      }
+      userDao.userRegistration(login, password, fio, email, phoneNum, address, role);
     } catch (DaoException e) {
       throw new ServiceException(e.getMessage());
     }
-    return user;
+    return true;
   }
 
+  /**
+   * 
+   * Method of adding a user to the blacklist
+   *
+   */
   @Override
   public void addtoBlackList(int userId) throws ServiceException {
-    System.out.println("root1");
 
     try {
       userDao.addtoBlackList(userId);
@@ -56,9 +82,13 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * 
+   * Method of receiving all defaulters
+   *
+   */
   @Override
   public List<User> getAllPaymentEvaders() throws ServiceException {
-    System.out.println("root1");
     List<User> paymentEvaders = new ArrayList<User>();
     try {
       paymentEvaders = userDao.getAllPaymentEvaders();

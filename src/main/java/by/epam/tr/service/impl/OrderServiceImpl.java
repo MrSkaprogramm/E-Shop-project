@@ -8,23 +8,44 @@ import by.epam.tr.bean.Order;
 import by.epam.tr.dao.DaoException;
 import by.epam.tr.dao.DaoProvider;
 import by.epam.tr.dao.OrderDao;
+import by.epam.tr.dao.UserDao;
 import by.epam.tr.service.OrderService;
 import by.epam.tr.service.ServiceException;
 
+/**
+ * 
+ * A class of the Service layer containing methods for working with the Order entity
+ *
+ */
 public class OrderServiceImpl implements OrderService {
   private static final DaoProvider daoProvider = DaoProvider.getDaoprovider();
   private static final OrderDao orderDao = daoProvider.getOrderDao();
+  private static final UserDao userDao = daoProvider.getUserDao();
 
+  /**
+   * 
+   * Method of placing an order
+   *
+   */
   @Override
-  public void makeOrder(int userId, List<Item> cart) throws ServiceException {
+  public boolean makeOrder(int userId, List<Item> cart) throws ServiceException {
 
     try {
+      if (!userDao.checkUserStatus(userId)) {
+        return false;
+      }
       orderDao.makeOrder(userId, cart);
     } catch (DaoException e) {
       throw new ServiceException(e.getMessage());
     }
+    return true;
   }
 
+  /**
+   * 
+   * Method of adding products to the cart
+   *
+   */
   @Override
   public List<Item> addItemToCart(List<Item> cart, int itemId, String name, String itemInfo,
       int price) {
@@ -37,6 +58,11 @@ public class OrderServiceImpl implements OrderService {
     return cart;
   }
 
+  /**
+   * 
+   * Method of removing items from the cart
+   *
+   */
   @Override
   public List<Item> deleteItemFromCart(List<Item> cart, int itemId) {
     Iterator<Item> cartIterator = cart.iterator();
@@ -50,6 +76,11 @@ public class OrderServiceImpl implements OrderService {
     return cart;
   }
 
+  /**
+   * 
+   * Method of receiving all orders
+   *
+   */
   @Override
   public List<Order> getAllOrders(int userId) throws ServiceException {
     List<Order> orders = new ArrayList<Order>();
