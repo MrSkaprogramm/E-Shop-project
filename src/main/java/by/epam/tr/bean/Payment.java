@@ -3,6 +3,11 @@ package by.epam.tr.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * 
+ * A class describing the payment entity
+ *
+ */
 public class Payment implements Serializable {
   private static final long serialVersionUID = 580027163494227104L;
   private double paymentSum;

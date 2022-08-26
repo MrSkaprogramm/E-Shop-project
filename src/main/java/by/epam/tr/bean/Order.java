@@ -3,6 +3,11 @@ package by.epam.tr.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * 
+ * Class describing the order entity
+ *
+ */
 public class Order implements Serializable{
   private static final long serialVersionUID = 7366414920112831376L;
   private int orderId;

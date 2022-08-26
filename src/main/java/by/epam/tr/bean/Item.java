@@ -3,6 +3,11 @@ package by.epam.tr.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * 
+ * A class describing the product entity
+ *
+ */
 public class Item implements Serializable{
   private static final long serialVersionUID = -1449298819053482088L;
   private int itemId;
