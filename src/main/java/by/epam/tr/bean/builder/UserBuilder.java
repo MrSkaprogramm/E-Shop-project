@@ -4,6 +4,11 @@ import by.epam.tr.bean.Role;
 import by.epam.tr.bean.User;
 import by.epam.tr.bean.UserStatus;
 
+/**
+ * 
+ * A class that allows you to create objects of the User class by initializing different variables
+ *
+ */
 public class UserBuilder {
   private User user = new User();
 
