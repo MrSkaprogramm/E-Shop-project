@@ -1,10 +1,15 @@
 package by.epam.tr.service;
 
-import by.epam.tr.service.impl.UserServiceImpl;
 import by.epam.tr.service.impl.ItemServiceImpl;
 import by.epam.tr.service.impl.OrderServiceImpl;
 import by.epam.tr.service.impl.PaymentServiceImpl;
+import by.epam.tr.service.impl.UserServiceImpl;
 
+/**
+ * 
+ * The explorer class redirects to a specific class of the Service layer
+ *
+ */
 public class ServiceProvider {
   private static final ServiceProvider serviceProvider = new ServiceProvider();
 

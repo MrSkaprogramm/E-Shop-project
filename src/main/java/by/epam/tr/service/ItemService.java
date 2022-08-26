@@ -3,6 +3,11 @@ package by.epam.tr.service;
 import java.util.List;
 import by.epam.tr.bean.Item;
 
+/**
+ * 
+ * Interface of the Service layer containing methods that work with the Item entity
+ *
+ */
 public interface ItemService {
   public void addItem(String name, String itemInfo, int price)
       throws ServiceException;
