@@ -18,7 +18,19 @@ import by.epam.tr.controller.command.impl.ShowCartCommand;
 import by.epam.tr.controller.command.impl.ShowCatalogCommand;
 import by.epam.tr.controller.command.impl.ShowOrderListCommand;
 import by.epam.tr.controller.command.impl.ShowPaymentEvaderListCommand;
+import by.epam.tr.controller.command.impl.go.GoAddItemCommand;
+import by.epam.tr.controller.command.impl.go.GoAdminPageCommand;
+import by.epam.tr.controller.command.impl.go.GoAuthorizationCommand;
+import by.epam.tr.controller.command.impl.go.GoChangeItemsDetailsCommand;
+import by.epam.tr.controller.command.impl.go.GoClientPageCommand;
+import by.epam.tr.controller.command.impl.go.GoPayCommand;
+import by.epam.tr.controller.command.impl.go.GoRegistrationCommand;
 
+/**
+ * 
+ * The explorer class redirects to a specific command in accordance with the request
+ *
+ */
 public class CommandProvider {
   private static final CommandProvider commandProvider = new CommandProvider();
   private Map<CommandName, Command> commands = new HashMap<CommandName, Command>();
@@ -37,9 +49,16 @@ public class CommandProvider {
     commands.put(CommandName.DELETE_FROM_CART, new DeleteItemFromCartCommand());
     commands.put(CommandName.DELETE_ITEM, new DeleteItemCommand());
     commands.put(CommandName.SHOW_CATALOG, new ShowCatalogCommand());
+    commands.put(CommandName.SHOW_CART, new ShowCartCommand());
     commands.put(CommandName.SHOW_PAY_EVADERS_LIST, new ShowPaymentEvaderListCommand());
     commands.put(CommandName.SHOW_ORDER_LIST, new ShowOrderListCommand());
-    commands.put(CommandName.SHOW_CART, new ShowCartCommand());
+    commands.put(CommandName.GO_ADD_ITEM, new GoAddItemCommand());
+    commands.put(CommandName.GO_ADMIN_PROFILE, new GoAdminPageCommand());
+    commands.put(CommandName.GO_AUTHORIZATION, new GoAuthorizationCommand());
+    commands.put(CommandName.GO_CHANGE_ITEMS_DETAILS, new GoChangeItemsDetailsCommand());
+    commands.put(CommandName.GO_CLIENT_PROFILE, new GoClientPageCommand());
+    commands.put(CommandName.GO_PAY, new GoPayCommand());
+    commands.put(CommandName.GO_REGISTRATION, new GoRegistrationCommand());
   }
 
   public Command getCommand(String commandName) {
